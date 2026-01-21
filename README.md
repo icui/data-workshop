@@ -24,26 +24,13 @@ matlab
 ```
 
 ## Part 1: Download and extract data
-We use earthquake records from 1976 to 2020 from [Global CMT Catalog](https://www.globalcmt.org). Direct link is provided as variable in the code below. More description on the format of the earthquake record can be found [here](https://www.ldeo.columbia.edu/~gcmt/projects/CMT/catalog/allorder.ndk_explained).
 
-#### Access the catalog
-The catalog will be saved as a very long string variable named `data`. Do not print it in the terminal directly, go to the [url](https://www.ldeo.columbia.edu/~gcmt/projects/CMT/catalog/jan76_dec20.ndk) to observe the value of `data`.
+#### Global Centroid-Moment-Tensor (CMT) catalog
+We use earthquake records from 1976 to 2020 from [Global CMT Catalog](https://www.globalcmt.org). More description on the format of the earthquake record can be found [here](https://www.ldeo.columbia.edu/~gcmt/projects/CMT/catalog/allorder.ndk_explained). The catalog will be saved as a text file `jan76_dec20.ndk`.
 
-##### Python
-```py
-import urllib.request
-
-url='https://www.ldeo.columbia.edu/~gcmt/projects/CMT/catalog/jan76_dec20.ndk'
-
-with urllib.request.urlopen(url) as response:
-    data = response.read().decode('utf-8')
-```
-
-##### MatLab
-```matlab
-url='https://www.ldeo.columbia.edu/~gcmt/projects/CMT/catalog/jan76_dec20.ndk';
-options = weboptions('ContentType','text');
-data = webread(url, options);
+```sh
+#!/bin/sh
+wget https://www.ldeo.columbia.edu/~gcmt/projects/CMT/catalog/jan76_dec20.ndk
 ```
 
 #### Extract and save data
@@ -51,9 +38,9 @@ We need depth, moment magnitude and six moment tensor components for each earthq
 
 <img src="img/ndk_format.png" alt="NDK Format" width="600"/>
 
-### Part 2: Process saved data
+## Part 2: Process saved data
 1. Calculate the min, max and median of earthquake depths
-2. Calculate the Moment magnitude of each earthquake `Mw = (2/3)*(log10(M0) - 16.1)`
+2. Calculate the Moment magnitude of each earthquake `Mw = (2/3)*(log10(M0) - 16.1)` and count earthquakes with moment magnitude greater than 8.0
 3. Find the maximum absolute value among the moment tensor components of all earthquakes
 4. Save the results
 

@@ -1,12 +1,9 @@
-import urllib.request
 import numpy as np
 import json
 import h5py
 
-url='https://www.ldeo.columbia.edu/~gcmt/projects/CMT/catalog/jan76_dec20.ndk'
-
-with urllib.request.urlopen(url) as response:
-    data = response.read().decode('utf-8').splitlines() # Read as text and split into lines
+with open('jan76_dec20.ndk', 'r') as file:
+    data = file.readlines()
 
 # option 1: Nested dictionary (JSON)
 data_nested = {}

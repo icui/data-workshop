@@ -1,6 +1,4 @@
-url = 'https://www.ldeo.columbia.edu/~gcmt/projects/CMT/catalog/jan76_dec20.ndk';
-options = weboptions('ContentType','text');
-data = splitlines(webread(url, options));
+data = readlines('jan76_dec20.ndk');
 
 % option 1: Nested dictionary (JSON)
 data_nested = struct();
