@@ -136,3 +136,7 @@ which should produce output
   double   temperature       5*{40} = 0 / 0
   string   temperature/unit  attr   = "K"
 ```
+
+## Part 4: Redo Part 2 with MPI
+1. Parallel write with parameter + array
+2. Parallel write with ADIOS2
