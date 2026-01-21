@@ -138,5 +138,5 @@ which should produce output
 ```
 
 ## Part 4: Redo Part 2 with MPI
-1. Parallel write with parameter + array
-2. Parallel write with ADIOS2
+1. Parallel write with parameter + array  (two files per MPI process)
+2. Parallel write with ADIOS2  (single file)
