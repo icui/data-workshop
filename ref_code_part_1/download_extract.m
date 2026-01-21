@@ -14,7 +14,8 @@ data_array = zeros(floor(length(data)/5), 8);  % Preallocate array
 data_kv = struct();
 
 % Process the data by lines
-for i = 1:5:length(data) % each event has 5 lines
+limit = floor(length(data)/5) * 5;
+for i = 1:5:limit % each event has 5 lines
     event_name = strsplit(strtrim(data{i+1}));
     event_name = event_name{1};
     

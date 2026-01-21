@@ -23,7 +23,7 @@ module load matlab/R2025b
 matlab
 ```
 
-### Part 1: download and extract data
+### Part 1: Download and extract data
 We use earthquake records from 1976 to 2020 from [Global CMT Catalog](https://www.globalcmt.org). Direct link is provided as variable in the code below. More description on the format of the earthquake record can be found [here](https://www.ldeo.columbia.edu/~gcmt/projects/CMT/catalog/allorder.ndk_explained).
 
 #### Access the catalog
@@ -51,7 +51,11 @@ We need depth, moment magnitude and six moment tensor components for each earthq
 
 <img src="img/ndk_format.png" alt="NDK Format" width="600"/>
 
-### Part 2: process saved data
+### Part 2: Process saved data
 1. Calculate the min, max and median of earthquake depths
 2. Calculate the Moment magnitude of each earthquake `Mw = (2/3)*(log10(M0) - 16.1)`
 3. Find the maximum absolute value among the moment tensor components of all earthquakes
+4. Save the results
+
+### Part 3: Parallel write with ADIOS2
+
