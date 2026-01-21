@@ -50,3 +50,8 @@ data = webread(url, options);
 We need depth, moment magnitude and six moment tensor components for each earthquake. Save them in a format that you think makes sense for processing.
 
 <img src="img/ndk_format.png" alt="NDK Format" width="600"/>
+
+### Part 2: process saved data
+1. Calculate the min, max and median of earthquake depths
+2. Calculate the Moment magnitude of each earthquake `Mw = (2/3)*(log10(M0) - 16.1)`
+3. Find the maximum absolute value among the moment tensor components of all earthquakes
