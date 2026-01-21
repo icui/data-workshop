@@ -8,8 +8,11 @@ data_meta.row = {};
 data_meta.column = {'depth', 'm0', 'm1', 'm2', 'm3', 'm4', 'm5', 'M0'};
 data_array = zeros(floor(length(data)/5), 8);  % Preallocate array
 
-% option 3: Key-value pairs (HDF5)
-data_kv = struct();
+% option 3: Key-value pairs (by event)
+% Note: this option is inefficient and crashes MatLab. For demonstration only. Refer to Python code for implementation.
+
+% option 4: Key-value pairs (by data class)
+data_kv = struct('depth', [], 'm0', [], 'm1', [], 'm2', [], 'm3', [], 'm4', [], 'm5', [], 'M0', []);
 
 % Process the data by lines
 limit = floor(length(data)/5) * 5;
@@ -48,7 +51,14 @@ for i = 1:5:limit % each event has 5 lines
     data_array(floor((i-1)/5) + 1, :) = event_data_array;
 
     % option 3: Key-value pairs (HDF5)
-    data_kv.(event_name) = event_data_array;
+    data_kv.depth(end+1) = depth;
+    data_kv.m0(end+1) = m0 * 10^ex;
+    data_kv.m1(end+1) = m1 * 10^ex;
+    data_kv.m2(end+1) = m2 * 10^ex;
+    data_kv.m3(end+1) = m3 * 10^ex;
+    data_kv.m4(end+1) = m4 * 10^ex;
+    data_kv.m5(end+1) = m5 * 10^ex;
+    data_kv.M0(end+1) = M0 * 10^ex;
 end
 
 % save option 1
@@ -62,14 +72,14 @@ fprintf(fid, '%s', jsonencode(data_meta, 'PrettyPrint', true));
 fclose(fid);
 save('data_array.mat', 'data_array');
 
-% save option 3
-if exist('data_kv.h5', 'file')
-    delete('data_kv.h5');
+% save option 4
+if exist('data_kv2.h5', 'file')
+    delete('data_kv2.h5');
 end
 keys = fieldnames(data_kv);
 for k = 1:length(keys)
     key = keys{k};
     val = data_kv.(key);
-    h5create('data_kv.h5', ['/' key], size(val));
-    h5write('data_kv.h5', ['/' key], val);
+    h5create('data_kv2.h5', ['/' key], size(val));
+    h5write('data_kv2.h5', ['/' key], val);
 end

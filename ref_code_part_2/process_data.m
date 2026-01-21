@@ -17,17 +17,17 @@ data_meta = jsondecode(str);
 load('data_array.mat', 'data_array'); % Loading .mat instead of .npy
 load_time_2 = toc;
 
-% load option 3
+% load option 4
 tic;
 data_kv = struct();
-info = h5info('data_kv.h5');
+info = h5info('data_kv2.h5');
 for i = 1:length(info.Datasets)
     key = info.Datasets(i).Name;
     % h5read returns the dataset. Note: strings in keys might need handling if not simple
     % h5create in download_extract uses ['/' key], so we read ['/' key]
-    data_kv.(key) = h5read('data_kv.h5', ['/' key]);
+    data_kv.(key) = h5read('data_kv2.h5', ['/' key]);
 end
-load_time_3 = toc;
+load_time_4 = toc;
 
 % Using option 1
 tic;
@@ -82,36 +82,20 @@ calc_time_2 = toc;
 % Using option 3
 tic;
 % Calculate the min, max and median of earthquake depths
-fields3 = fieldnames(data_kv);
-depths_option3 = [];
-for i = 1:length(fields3)
-    depths_option3(end+1) = data_kv.(fields3{i})(1);
-end
-min_depth3 = min(depths_option3);
-max_depth3 = max(depths_option3);
-median_depth3 = median(depths_option3);
+depths_option4 = data_kv.depth;
+min_depth4 = min(depths_option4);
+max_depth4 = max(depths_option4);
+median_depth4 = median(depths_option4);
 % Calculate the Moment magnitude of each earthquake `Mw = (2/3)*(log10(M0) - 16.1)`
-moments_option3 = [];
-for i = 1:length(fields3)
-    moments_option3(end+1) = data_kv.(fields3{i})(8);
-end
-mw_option3 = (2/3) * (log10(moments_option3) - 16.1);
-earthquakes_gt_8_option3 = {};
-for i = 1:length(fields3)
-    event = data_kv.(fields3{i});
-    if ((2/3)*(log10(event(8)) - 16.1)) > 8.0
-        earthquakes_gt_8_option3{end+1} = event;
-    end
-end
+moments_option4 = data_kv.M0;
+mw_option4 = (2/3) * (log10(moments_option4) - 16.1);
+earthquakes_gt_8_option4 = mw_option4(mw_option4 > 8.0);
 % Find the maximum absolute value among the moment tensor components of all earthquakes
-max_moment_tensor_component3 = 0;
-for i = 1:length(fields3)
-    event = data_kv.(fields3{i});
-    for val = event(2:7)' % m0 to m5 are elements 2 to 7
-        max_moment_tensor_component3 = max(max_moment_tensor_component3, abs(val));
-    end
+max_moment_tensor_component4 = 0;
+for key = {'m0', 'm1', 'm2', 'm3', 'm4', 'm5'}
+    max_moment_tensor_component4 = max(max_moment_tensor_component4, max(abs(data_kv.(key{1}))));
 end
-calc_time_3 = toc;
+calc_time_4 = toc;
 
 % Print results
 fprintf('Option 1 - Nested Dictionary:\n');
@@ -128,8 +112,8 @@ fprintf('Max Moment Tensor Component: %f\n', max_moment_tensor_component2);
 fprintf('Load Time: %.4fs Option 2 Calculation Time: %.4fs\n', load_time_2, calc_time_2);
 fprintf('\n');
 
-fprintf('Option 3 - Key-Value Pairs:\n');
-fprintf('Min Depth: %f, Max Depth: %f, Median Depth: %f\n', min_depth3, max_depth3, median_depth3);
-fprintf('Number of Earthquakes with Mw > 8.0: %d\n', length(earthquakes_gt_8_option3));
-fprintf('Max Moment Tensor Component: %f\n', max_moment_tensor_component3);
-fprintf('Load Time: %.4fs Option 3 Calculation Time: %.4fs\n', load_time_3, calc_time_3);
+fprintf('Option 4 - Key-Value Pairs:\n');
+fprintf('Min Depth: %f, Max Depth: %f, Median Depth: %f\n', min_depth4, max_depth4, median_depth4);
+fprintf('Number of Earthquakes with Mw > 8.0: %d\n', length(earthquakes_gt_8_option4));
+fprintf('Max Moment Tensor Component: %f\n', max_moment_tensor_component4);
+fprintf('Load Time: %.4fs Option 4 Calculation Time: %.4fs\n', load_time_4, calc_time_4);
